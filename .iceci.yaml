@@ -67,16 +67,16 @@ steps:
     - latest
 
 # comment this step out if you do not want to integrate this pipeline with slack
-- name: slack-notify
-  containerRun:
-    image: iceci/utils
-    script: |
-      cat <<EOF > slacknotify.json
-      {
-        "text" : "Build $ICECI_BUILD_NUMBER on branch $ICECI_GIT_BRANCH_NAME finished successfully!"
-      }
-      EOF
-      curl -X POST -H 'Content-type: application/json' --data "@slacknotify.json" $SLACK_WEBHOOK
-    environment:
-    - name: SLACK_WEBHOOK
-      fromSecret: slack-webhook
+#- name: slack-notify
+#  containerRun:
+#    image: iceci/utils
+#    script: |
+#      cat <<EOF > slacknotify.json
+#      {
+#        "text" : "Build $ICECI_BUILD_NUMBER on branch $ICECI_GIT_BRANCH_NAME finished successfully!"
+#      }
+#      EOF
+#      curl -X POST -H 'Content-type: application/json' --data "@slacknotify.json" $SLACK_WEBHOOK
+#    environment:
+#    - name: SLACK_WEBHOOK
+#      fromSecret: slack-webhook
