@@ -65,6 +65,15 @@ steps:
     tags:
     - "{{ ICECI_BUILD_NUMBER }}"
     - latest
+- name: generate-date
+  containerRun:
+    image: busybox
+    script: "date > date.log"
+
+- name: print-date
+  containerRun:
+    image: busybox
+    script: "cat date.log"
 
 # comment this step out if you do not want to integrate this pipeline with slack
 #- name: slack-notify
