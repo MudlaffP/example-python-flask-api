@@ -1,8 +1,8 @@
-globals:
-  onFailure:
+#globals:
+#  onFailure:
   #  This failure handler will be called failed of any step in the pipeline
   # comment this out if you do not want to integrate pipeline with slack
-  - handlerName: slack-notify-error
+#  - handlerName: slack-notify-error
 
 failureHandlers:
 - name: debug-env
@@ -15,18 +15,18 @@ failureHandlers:
     echo "ls -la"
     ls -la
 
-- name: slack-notify-error
-  image: iceci/utils
-  script: |
-    cat <<EOF > slacknotify.json
-    {
-      "text" : "Build $ICECI_BUILD_NUMBER on branch $ICECI_GIT_BRANCH_NAME failed on step $ICECI_FAILED_STEP_NAME commited by $ICECI_GIT_AUTHOR_NAME"
-    }
-    EOF
-    curl -X POST -H 'Content-type: application/json' --data "@slacknotify.json" $SLACK_WEBHOOK
-  environment:
-  - name: SLACK_WEBHOOK
-    fromSecret: slack-webhook
+#- name: slack-notify-error
+#  image: iceci/utils
+#  script: |
+#    cat <<EOF > slacknotify.json
+#    {
+#      "text" : "Build $ICECI_BUILD_NUMBER on branch $ICECI_GIT_BRANCH_NAME failed on step $ICECI_FAILED_STEP_NAME commited by $ICECI_GIT_AUTHOR_NAME"
+#    }
+#    EOF
+#    curl -X POST -H 'Content-type: application/json' --data "@slacknotify.json" $SLACK_WEBHOOK
+#  environment:
+#  - name: SLACK_WEBHOOK
+#    fromSecret: slack-webhook
 
 # Service with postgres will run during whole pipeline
 services:
