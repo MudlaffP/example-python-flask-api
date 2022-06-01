@@ -5,22 +5,36 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
+  test:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
-      - image: cimg/base:stable
+      - image: cimg/python:3.10.4
+        environment:
+          QUOTES_DB_URI: postgresql+psycopg2://dbuser:dbpass@db:5432/testdb
+          FLASK_APP: quotes.py
+      - image: postgres:11
+        name: db
+        environment:
+          POSTGRES_DB: testdb
+          POSTGRES_PASSWORD: dbpass
+          POSTGRES_USER: dbuser
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: "install requirements"
+          command: |
+            pip install -r requirements.txt
+            pip install -r requirements-test.txt
+      - run:
+          name: "run tests"
+          command: pytest qutes_tests.py
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello
+      - test
