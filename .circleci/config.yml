@@ -13,7 +13,7 @@ jobs:
         environment:
           QUOTES_DB_URI: postgresql+psycopg2://dbuser:dbpass@localhost:5432/testdb
           FLASK_APP: quotes.py
-      - image: cimg/postgres:11
+      - image: cimg/postgres:14.0
         environment:
           POSTGRES_DB: testdb
           POSTGRES_PASSWORD: dbpass
