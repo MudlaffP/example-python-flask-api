@@ -2,6 +2,9 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+orbs:
+  datadog-agent: datadog/agent@0
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -24,6 +27,7 @@ jobs:
     steps:
       - checkout:
           path: ~/app
+      - datadog-agent/setup
       - run:
           name: "install requirements"
           command: |
@@ -34,10 +38,11 @@ jobs:
           command: |
             flask initdb
             pytest quotes_tests.py
+      - datadog-agent/stop
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  flask-app:
     jobs:
       - test
