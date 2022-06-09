@@ -1,1 +1,15 @@
 version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: base:202205
+    steps:
+      - run:
+          name: test
+          command: echo test
+
+workflows:
+  base:
+    jobs:
+      - test
