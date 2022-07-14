@@ -31,6 +31,16 @@ jobs:
           command: |
             flask initdb
             DD_SERVICE=${DD_SERVICE} DD_ENV=${DD_ENV} pytest quotes_tests.py --ddtrace
+      - when:
+          condition:
+            and:
+              - on_success
+              - equal: [ circleci-project-setup, << pipeline.git.branch >> ]
+          steps:
+            - run:
+                name: test when step
+                command: echo "test when step to run depending on check"
+
       - datadog-agent/stop
   echo:
     docker:
