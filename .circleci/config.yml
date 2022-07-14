@@ -33,12 +33,19 @@ jobs:
             DD_SERVICE=${DD_SERVICE} DD_ENV=${DD_ENV} pytest quotes_tests.py --ddtrace
       - when:
           condition:
-            and:
-              - on_failure
-              - equal: [ circleci-project-setup, << pipeline.git.branch >> ]
+            equal: [ circleci-project-setup, << pipeline.git.branch >> ]
           steps:
             - run:
-                name: test when step
+                when: on_success
+                name: test when step - setup
+                command: echo "test when step to run depending on check"
+      - when:
+          condition:
+            equal: [ master, << pipeline.git.branch >> ]
+          steps:
+            - run:
+                when: on_success
+                name: test when step - master
                 command: echo "test when step to run depending on check"
 
 #      - datadog-agent/stop
@@ -54,4 +61,7 @@ workflows:
   flask-app:
     jobs:
       - test
-      - echo
+      - echo:
+          requires:
+            - test
+
