@@ -37,7 +37,7 @@ jobs:
               - equal: [ circleci-project-setup, << pipeline.git.branch >> ]
           steps:
             - run:
-                when: on_success
+                when: on_failure
                 name: test when step - setup
                 command: echo "test when step to run depending on check"
       - when:
