@@ -17,7 +17,7 @@ jobs:
           POSTGRES_USER: dbuser
     working_directory: ~/app
     steps:
-      - datadog-agent/setup
+#      - datadog-agent/setup
       - checkout:
           path: ~/app
       - run:
@@ -41,7 +41,7 @@ jobs:
                 name: test when step
                 command: echo "test when step to run depending on check"
 
-      - datadog-agent/stop
+#      - datadog-agent/stop
   echo:
     docker:
       - image: cimg/python:3.10.4
