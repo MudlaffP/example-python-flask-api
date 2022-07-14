@@ -33,12 +33,12 @@ jobs:
             DD_SERVICE=${DD_SERVICE} DD_ENV=${DD_ENV} pytest quotes_tests.py --ddtrace
       - when:
           condition:
-            and:
-              - equal: [ circleci-project-setup, << pipeline.git.branch >> ]
+            not:
+              or:
+                - equal: [ master, << pipeline.git.branch >> ]
           steps:
             - run:
-                when: on_failure
-                name: test when step - setup
+                name: test when step - not master
                 command: echo "test when step to run depending on check"
       - when:
           condition:
