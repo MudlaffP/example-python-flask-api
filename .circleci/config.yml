@@ -16,6 +16,9 @@ jobs:
           name: get docker images
           command: docker image ls
       - run:
+          name: sleep 30 seconds
+          command: sleep 30s
+      - run:
           name: "docker build"
           command: make docker-build
 
