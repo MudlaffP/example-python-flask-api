@@ -3,7 +3,7 @@ version: 2.1
 executors:
   my-runner:
     machine: true
-    resource_class: mudlaffp/k8s-runner
+    resource_class: mudlaffp/vagrant
 
 jobs:
   test:
