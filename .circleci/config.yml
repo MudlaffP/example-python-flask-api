@@ -1,69 +1,25 @@
 version: 2.1
 
-orbs:
-  datadog-agent: datadog/agent@3.2.0
+executors:
+  my-runner:
+    machine: true
+    resource_class: mudlaffp/k8s-runner
 
 jobs:
   test:
-    docker:
-      - image: cimg/python:3.10.4
-        environment:
-          QUOTES_DB_URI: postgresql+psycopg2://dbuser:dbpass@localhost:5432/testdb
-          FLASK_APP: quotes.py
-      - image: cimg/postgres:14.0
-        environment:
-          POSTGRES_DB: testdb
-          POSTGRES_PASSWORD: dbpass
-          POSTGRES_USER: dbuser
+    executor: my-runner
     working_directory: ~/app
     steps:
-#      - datadog-agent/setup
       - checkout:
           path: ~/app
       - run:
-          name: "install requirements"
+          name: "docker build"
           command: |
-            pip install -r requirements.txt
-            pip install -r requirements-test.txt
-            pip install ddtrace
-      - run:
-          name: "run tests"
-          command: |
-            flask initdb
-            DD_SERVICE=${DD_SERVICE} DD_ENV=${DD_ENV} pytest quotes_tests.py --ddtrace
-      - when:
-          condition:
-            not:
-              or:
-                - equal: [ master, << pipeline.git.branch >> ]
-          steps:
-            - run:
-                name: test when step - not master
-                command: echo "test when step to run depending on check"
-      - when:
-          condition:
-            and:
-              - equal: [ master, << pipeline.git.branch >> ]
-          steps:
-            - run:
-                when: on_success
-                name: test when step - master
-                command: echo "test when step to run depending on check"
+            make docker-build
 
-#      - datadog-agent/stop
-  echo:
-    docker:
-      - image: cimg/python:3.10.4
-    steps:
-#      - datadog-agent/setup
-      - run: echo Test
-#      - datadog-agent/stop
 
 workflows:
   flask-app:
     jobs:
       - test
-      - echo:
-          requires:
-            - test
 
