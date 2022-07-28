@@ -13,13 +13,11 @@ jobs:
       - checkout:
           path: ~/app
       - run:
-          name: get current user name
-          command: id
+          name: get docker images
+          command: docker image ls
       - run:
           name: "docker build"
-          command: |
-            make docker-build
-
+          command: make docker-build
 
 workflows:
   flask-app:
