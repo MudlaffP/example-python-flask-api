@@ -1,4 +1,7 @@
 .PHONY: docker-build
 docker-build:
-	mkdir -p pip-cache
-	docker build -v "$(pwd)/pip-cache:/root/.cache/pip"-t example-app:lastest .
+	docker build -t example-app:lastest .
+
+.PHONY: docker-build2
+docker-build2:
+	docker build -t example-app2:lastest .

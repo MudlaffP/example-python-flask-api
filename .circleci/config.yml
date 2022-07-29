@@ -21,6 +21,11 @@ jobs:
           command: |
             export DOCKER_BUILDKIT=1
             make docker-build
+      - run:
+          name: "docker build2"
+          command: |
+            export DOCKER_BUILDKIT=1
+            make docker-build2
 #      - run:
 #          name: check pip cache after build
 #          command: sudo ls -al /root/.cache/pip
