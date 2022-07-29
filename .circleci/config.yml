@@ -1,37 +1,26 @@
 version: 2.1
 
-orbs:
-  datadog-agent: datadog/agent@3.2.0
+executors:
+  my-runner:
+    machine: true
+    resource_class: mudlaffp/vagrant
 
 jobs:
   test:
-    docker:
-      - image: cimg/python:3.10.4
-        environment:
-          QUOTES_DB_URI: postgresql+psycopg2://dbuser:dbpass@localhost:5432/testdb
-          FLASK_APP: quotes.py
-      - image: cimg/postgres:14.0
-        environment:
-          POSTGRES_DB: testdb
-          POSTGRES_PASSWORD: dbpass
-          POSTGRES_USER: dbuser
+    executor: my-runner
     working_directory: ~/app
     steps:
       - checkout:
           path: ~/app
-      - datadog-agent/setup
       - run:
-          name: "install requirements"
-          command: |
-            pip install -r requirements.txt
-            pip install -r requirements-test.txt
-            pip install ddtrace
+          name: get docker images
+          command: docker image ls
       - run:
-          name: "run tests"
-          command: |
-            flask initdb
-            DD_SERVICE=${DD_SERVICE} DD_ENV=${DD_ENV} pytest quotes_tests.py --ddtrace
-      - datadog-agent/stop
+          name: sleep 30 seconds
+          command: sleep 30s
+      - run:
+          name: "docker build"
+          command: make docker-build
 
 workflows:
   flask-app:
