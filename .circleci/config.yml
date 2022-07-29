@@ -21,20 +21,17 @@ jobs:
           command: |
             export DOCKER_BUILDKIT=1
             make docker-build
-      - run:
-          name: "docker build2"
-          command: |
-            export DOCKER_BUILDKIT=1
-            make docker-build2
 #      - run:
-#          name: check pip cache after build
-#          command: sudo ls -al /root/.cache/pip
+#          name: "docker build2"
+#          command: |
+#            export DOCKER_BUILDKIT=1
+#            make docker-build2
+      - run:
+          name: check pip cache after build
+          command: ls -al ./pip-cache
       - run:
           name: get docker images after build
           command: docker image ls
-      - run:
-          name: get docker volumes
-          command: docker volume ls
 
 workflows:
   flask-app:

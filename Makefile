@@ -1,5 +1,6 @@
 .PHONY: docker-build
 docker-build:
+	mkdir pip-cache
 	docker build -t example-app:lastest .
 
 .PHONY: docker-build2
