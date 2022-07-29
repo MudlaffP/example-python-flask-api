@@ -1,26 +1,30 @@
 version: 2.1
 
-executors:
-  my-runner:
-    machine: true
-    resource_class: mudlaffp/vagrant
-
 jobs:
   test:
-    executor: my-runner
+    docker:
+      - image: cimg/base:current
     working_directory: ~/app
     steps:
       - checkout:
           path: ~/app
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
       - run:
           name: get docker images
           command: docker image ls
       - run:
-          name: sleep 30 seconds
-          command: sleep 30s
+          name: check pip cache before build
+          command: ls -al /root/.cache/pip
       - run:
           name: "docker build"
-          command: make docker-build
+          command: |
+            export DOCKER_BUILDKIT=1
+            make docker-build
+      - run:
+          name: check pip cache after build
+          command: ls -al /root/.cache/pip
 
 workflows:
   flask-app:
