@@ -15,10 +15,14 @@ jobs:
           name: get docker images
           command: docker image ls
       - run:
+          name: create pip cache directory
+          command: mkdir ~/pip
+      - run:
           name: check path
           command: |
             pwd
             ls -al ~
+            id circleci
 #      - run:
 #          name: check pip cache before build
 #          command: sudo ls -al /root/.cache/pip
