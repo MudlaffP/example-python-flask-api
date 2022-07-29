@@ -32,6 +32,9 @@ jobs:
       - run:
           name: get docker images after build
           command: docker image ls
+      - run:
+          name: get docker volumes
+          command: docker volume ls
 
 workflows:
   flask-app:
