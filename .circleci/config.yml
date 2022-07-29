@@ -14,6 +14,11 @@ jobs:
       - run:
           name: get docker images
           command: docker image ls
+      - run:
+          name: check path
+          command: |
+            pwd
+            ls -al ~
 #      - run:
 #          name: check pip cache before build
 #          command: sudo ls -al /root/.cache/pip
@@ -22,9 +27,12 @@ jobs:
           command: |
             export DOCKER_BUILDKIT=1
             make docker-build
+#      - run:
+#          name: check pip cache after build
+#          command: sudo ls -al /root/.cache/pip
       - run:
-          name: check pip cache after build
-          command: sudo ls -al /root/.cache/pip
+          name: get docker images after build
+          command: docker image ls
 
 workflows:
   flask-app:
