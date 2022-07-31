@@ -44,7 +44,7 @@ jobs:
 #          command: docker image ls
       - run:
           name: get podman images
-          command: podman image ls
+          command: sudo podman image ls
 #      - run:
 #          name: "docker build"
 #          command: |
@@ -58,7 +58,7 @@ jobs:
           command: |
             export DOCKER_BUILDKIT=1
             export PROJECT_ROOT=$(pwd)
-            make podman-build
+            sudo make podman-build
       - run:
           name: check pip cache after podman build
           command: ls -al ./pip-cache
@@ -67,7 +67,7 @@ jobs:
 #          command: docker image ls
       - run:
           name: get podman images after build
-          command: podman image ls
+          command: sudo podman image ls
 
 workflows:
   flask-app:
