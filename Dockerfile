@@ -8,6 +8,9 @@ ADD requirements.txt .
 
 RUN pip install -r requirements.txt && \
     pip install gunicorn gevent && \
+    echo "=============================================" && \
+    echo "pip cache location" && \
+    pip cache dir && \
     ls -al /root/.cache/pip
 
 ADD quotes.py /code/quotes.py
