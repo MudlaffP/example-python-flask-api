@@ -33,6 +33,7 @@ jobs:
               [storage]
               driver = "vfs"
             EOF
+            sudo podman system migrate
 #      - run:
 #          name: configure rootless access
 #          command: |
