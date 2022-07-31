@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     machine:
-      image: ubuntu-2204:2022.04.1
+      image: ubuntu-2004:2022.04.1
     working_directory: ~/app
     resource_class: medium
     steps:
@@ -13,7 +13,6 @@ jobs:
           name: install dependencies
           command: |
             sudo apt -y update
-            sudo apt -y upgrade
             sudo apt  install -y libvirt-daemon
             sudo systemctl enable libvirtd
             sudo systemctl start libvirtd
