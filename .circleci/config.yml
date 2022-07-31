@@ -34,12 +34,12 @@ jobs:
 #              driver = "vfs"
 #            EOF
 #            sudo podman system migrate
-#      - run:
-#          name: configure rootless access
-#          command: |
-#            sudo sh -c "echo $(id -un):100000:200000 >> /etc/subuid"
-#            sudo sh -c "echo $(id -gn):100000:200000 >> /etc/subgid"
-#            sudo podman system migrate
+      - run:
+          name: configure rootless access
+          command: |
+            sudo sh -c "echo $(id -un):100000:200000 >> /etc/subuid"
+            sudo sh -c "echo $(id -gn):100000:200000 >> /etc/subgid"
+            sudo podman system migrate
 #      - run:
 #          name: get docker images
 #          command: docker image ls
