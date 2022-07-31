@@ -6,9 +6,7 @@ ENV PYTHONPATH /code/
 
 ADD requirements.txt .
 
-RUN id && \
-    ls -al /root/.cache && \
-    pip install -r requirements.txt && \
+RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt && \
     pip install gunicorn gevent && \
     echo "=============================================" && \
     echo "pip cache location" && \
