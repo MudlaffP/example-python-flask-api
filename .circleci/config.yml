@@ -38,6 +38,8 @@ jobs:
           command: |
             sudo sh -c "echo $(id -un):100000:200000 >> /etc/subuid"
             sudo sh -c "echo $(id -gn):100000:200000 >> /etc/subgid"
+            zgrep CONFIG_USER_NS /proc/config.gz
+            echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf
             podman system migrate
 #      - run:
 #          name: get docker images
