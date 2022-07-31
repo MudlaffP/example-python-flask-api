@@ -15,7 +15,7 @@ jobs:
             sudo sed -i s/pk.archive.ubuntu.com/archive.ubuntu.com/ /etc/apt/sources.list
             sudo apt-get -y update
             sudo apt-get install -y libvirt-daemon
-            sudo apt-get install -y qemu-kvm
+            sudo apt-get install -y qemu-system-x86 qemu-kvm
       - run:
           name: install and configure podman
           command: |
