@@ -12,6 +12,7 @@ jobs:
       - run:
           name: install and configure podman
           command: |
+            zgrep CONFIG_USER_NS /proc/config.gz
             sudo apt-get -y update
             sudo apt-get -y install podman
             sudo sh -c "echo $(id -un):100000:200000 >> /etc/subuid"
