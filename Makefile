@@ -12,4 +12,4 @@ podman-build:
 	mkdir -p ./pip-cache
 	chmod 777 ./pip-cache
 	echo "project root location: ${PROJECT_ROOT}"
-	sudo podman build -v ${PROJECT_ROOT}/pip-cache:/root/.cache/pip -f ./Dockerfile -t example-app-podman:lastest .
+	sudo podman build -v ${PROJECT_ROOT}/pip-cache:/root/.cache/pip:rw -f ./Dockerfile -t example-app-podman:lastest .
