@@ -33,20 +33,20 @@ jobs:
               [storage]
               driver = "vfs"
             EOF
-      - run:
-          name: get docker images
-          command: docker image ls
+#      - run:
+#          name: get docker images
+#          command: docker image ls
       - run:
           name: get podman images
           command: podman image ls
-      - run:
-          name: "docker build"
-          command: |
-            export DOCKER_BUILDKIT=1
-            make docker-build
-      - run:
-          name: check pip cache after docker build
-          command: ls -al ./pip-cache
+#      - run:
+#          name: "docker build"
+#          command: |
+#            export DOCKER_BUILDKIT=1
+#            make docker-build
+#      - run:
+#          name: check pip cache after docker build
+#          command: ls -al ./pip-cache
       - run:
           name: "podman build"
           command: |
@@ -56,9 +56,9 @@ jobs:
       - run:
           name: check pip cache after podman build
           command: ls -al ./pip-cache
-      - run:
-          name: get docker images after build
-          command: docker image ls
+#      - run:
+#          name: get docker images after build
+#          command: docker image ls
       - run:
           name: get podman images after build
           command: podman image ls
