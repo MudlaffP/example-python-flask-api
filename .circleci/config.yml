@@ -12,11 +12,11 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            sudo apt-get -y update && upgrade
-            sudo apt-get install -y libvirt-daemon
+            sudo apt -y update && upgrade
+            sudo apt  install -y libvirt-daemon
             sudo systemctl enable libvirtd
             sudo systemctl start libvirtd
-            sudo apt-get install -y qemu-kvm
+            sudo apt install -y qemu-kvm
       - run:
           name: install and configure podman
           command: |
