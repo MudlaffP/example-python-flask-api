@@ -14,7 +14,7 @@ jobs:
           command: |
             sudo apt-get -y update
             sudo apt-get install -y libvirt-daemon
-            sudo apt-get install -y qemu-kvm
+            sudo apt-get install -y qemu-utils qemu-common qemu-kvm
       - run:
           name: install and configure podman
           command: |
