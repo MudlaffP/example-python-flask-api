@@ -2,36 +2,51 @@ version: 2.1
 
 jobs:
   test:
-    docker:
-      - image: cimg/base:current
+    machine:
+      image: ubuntu-2204:2022.04.1
     working_directory: ~/app
+    resource_class: medium
     steps:
       - checkout:
           path: ~/app
-      - setup_remote_docker:
-          version: 20.10.14
+      - run:
+          name: install and configure podman
+          command: |
+            sudo apt-get -y update
+            sudo apt-get -y install podman
+            sudo sh -c "echo $(id -un):100000:200000 >> /etc/subuid"
+            sudo sh -c "echo $(id -gn):100000:200000 >> /etc/subgid"
+            podman system migrate
+            podman ps
       - run:
           name: get docker images
           command: docker image ls
-#      - run:
-#          name: check pip cache before build
-#          command: sudo ls -al /root/.cache/pip
+      - run:
+          name: get podman images
+          command: podman image ls
       - run:
           name: "docker build"
           command: |
             export DOCKER_BUILDKIT=1
             make docker-build
-#      - run:
-#          name: "docker build2"
-#          command: |
-#            export DOCKER_BUILDKIT=1
-#            make docker-build2
       - run:
-          name: check pip cache after build
+          name: check pip cache after docker build
+          command: ls -al ./pip-cache
+      - run:
+          name: "podman build"
+          command: |
+            export DOCKER_BUILDKIT=1
+            export PROJECT_ROOT=$(pwd)
+            make podman-build
+      - run:
+          name: check pip cache after podman build
           command: ls -al ./pip-cache
       - run:
           name: get docker images after build
           command: docker image ls
+      - run:
+          name: get podman images after build
+          command: podman image ls
 
 workflows:
   flask-app:
