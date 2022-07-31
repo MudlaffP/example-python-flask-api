@@ -2,31 +2,37 @@ version: 2.1
 
 jobs:
   test:
-    machine:
-      image: ubuntu-2004:2022.04.1
+    docker:
+      - image: cimg/base:stable
     working_directory: ~/app
-    resource_class: medium
+    resource_class: small
     steps:
       - checkout:
           path: ~/app
       - run:
-          name: install dependencies
+          name: Install podman
           command: |
-            sudo apt -y update
-            sudo apt install -y libvirt-daemon
-            echo "after installation libvirt daemon"
-            sudo systemctl list-unit-files | grep libvirt
-            sudo systemctl start libvirtd
-            sudo apt install -y qemu-kvm
+            echo 'deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_18.04/ /' | sudo tee -a /etc/apt/sources.list.d/podman.list
+            curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_18.04/Release.key | sudo apt-key add -
+            sudo apt-get update && sudo apt-get install -y podman
       - run:
-          name: install and configure podman
+          name: Apply settings for podman
           command: |
-            sudo apt-get -y update
-            sudo apt-get -y install podman
-            sudo sh -c "echo $(id -un):100000:200000 >> /etc/subuid"
-            sudo sh -c "echo $(id -gn):100000:200000 >> /etc/subgid"
-            podman system migrate
-            podman ps
+            cat \<< EOF | sudo tee /etc/containers/registries.conf.d/docker.conf
+              unqualified-search-registries = ["docker.io"]
+            EOF
+            
+            cat \<< EOF | sudo tee /etc/containers/containers.conf
+              [engine]
+              cgroup_manager = "cgroupfs"
+              storage_driver = "vfs"
+              events_logger = "file"
+            EOF
+            
+            cat \<< EOF | sudo tee /etc/containers/storage.conf
+              [storage]
+              driver = "vfs"
+            EOF
       - run:
           name: get docker images
           command: docker image ls
