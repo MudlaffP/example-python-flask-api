@@ -2,10 +2,10 @@ version: 2.1
 
 jobs:
   test:
-    docker:
-      - image: cimg/base:stable
+    machine:
+      image: ubuntu-2004:2022.04.1
     working_directory: ~/app
-    resource_class: small
+    resource_class: medium
     steps:
       - checkout:
           path: ~/app
