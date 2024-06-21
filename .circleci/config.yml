@@ -2,14 +2,74 @@ version: 2.1
 
 jobs:
   test:
-    docker:
-      - image: cimg/base:2022.05
+    machine:
+      image: ubuntu-2004:2022.04.1
+    working_directory: ~/app
+    resource_class: medium
     steps:
+      - checkout:
+          path: ~/app
       - run:
-          name: test
-          command: echo test
+          name: Install podman
+          command: |
+            echo 'deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_18.04/ /' | sudo tee -a /etc/apt/sources.list.d/podman.list
+            curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_18.04/Release.key | sudo apt-key add -
+            sudo apt-get update && sudo apt-get install -y fuse-overlayfs podman
+#      - run:
+#          name: Apply settings for podman
+#          command: |
+#            cat \<< EOF | sudo tee /etc/containers/registries.conf.d/docker.conf
+#              unqualified-search-registries = ["docker.io"]
+#            EOF
+#
+#            cat \<< EOF | sudo tee /etc/containers/containers.conf
+#              [engine]
+#              cgroup_manager = "cgroupfs"
+#              storage_driver = "vfs"
+#              events_logger = "file"
+#            EOF
+#
+#            cat \<< EOF | sudo tee /etc/containers/storage.conf
+#              [storage]
+#              driver = "vfs"
+#            EOF
+#            sudo podman system migrate
+      - run:
+          name: configure rootless access
+          command: |
+            sudo sh -c "echo $(id -un):100000:200000 >> /etc/subuid"
+            sudo sh -c "echo $(id -gn):100000:200000 >> /etc/subgid"
+            sudo podman system migrate
+#      - run:
+#          name: get docker images
+#          command: docker image ls
+      - run:
+          name: get podman images
+          command: sudo podman image ls
+#      - run:
+#          name: "docker build"
+#          command: |
+#            export DOCKER_BUILDKIT=1
+#            make docker-build
+#      - run:
+#          name: check pip cache after docker build
+#          command: ls -al ./pip-cache
+      - run:
+          name: "podman build"
+          command: |
+            export PROJECT_ROOT=$(pwd)
+            make podman-build
+      - run:
+          name: check pip cache after podman build
+          command: ls -al ./pip-cache
+#      - run:
+#          name: get docker images after build
+#          command: docker image ls
+      - run:
+          name: get podman images after build
+          command: sudo podman image ls
 
 workflows:
-  base:
+  flask-app:
     jobs:
       - test

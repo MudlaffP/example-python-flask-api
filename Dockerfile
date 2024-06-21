@@ -6,8 +6,12 @@ ENV PYTHONPATH /code/
 
 ADD requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install gunicorn gevent
+RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt && \
+    pip install gunicorn gevent && \
+    echo "=============================================" && \
+    echo "pip cache location" && \
+    pip cache dir && \
+    ls -al /root/.cache/pip
 
 ADD quotes.py /code/quotes.py
 
